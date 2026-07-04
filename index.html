@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kelburn WX — Garden Party weather, 2009–2026</title>
+  <meta name="description" content="A dashboard of the weather at every Kelburn Garden Party. How grim, exactly, and how it stacks up against a normal Scottish summer weekend.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#1c6d78">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C10 12 7 16 7 20a9 9 0 0 0 18 0c0-4-3-8-9-17z' fill='%231c6d78'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar__row">
+      <div class="brand"><b>KELBURN&nbsp;WX</b><span>Garden Party weather · 2009–2026</span></div>
+      <button class="iconbtn" id="themeBtn" type="button" aria-label="Switch colour theme">Auto</button>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section class="hero">
+      <p class="kicker mono">A weather post-mortem of the Kelburn Garden Party</p>
+      <h1>How grim is the Kelburn weekend?</h1>
+      <div class="hero-figure"><span id="hVerdict" class="hero-num tnum">–</span></div>
+      <p class="lede" id="hSub"></p>
+      <p class="meta mono">Kelburn Castle, Fairlie, Ayrshire · ERA5 reanalysis, nearest land cell · Fri–Sun = the festival, Thursday a bolt-on, Monday teardown</p>
+    </section>
+
+    <!-- filters -->
+    <div class="filters" id="filters">
+      <div class="filters__head">
+        <span class="filters__title">Filter — years &amp; days</span>
+        <div class="filters__actions">
+          <button class="iconbtn" id="allBtn" type="button">All</button>
+          <button class="iconbtn" id="recentBtn" type="button">Recent 5</button>
+          <button class="iconbtn" id="noneBtn" type="button">None</button>
+          <label class="toggle"><input type="checkbox" id="thuToggle"><span class="track"></span>Include Thursday</label>
+        </div>
+      </div>
+      <div class="chiprow" id="yearChips" role="group" aria-label="Select years"></div>
+    </div>
+
+    <div id="empty" class="card" style="display:none"><div class="cap">Nothing selected. Pick a year or two above.</div></div>
+
+    <div id="dash">
+      <!-- KPIs -->
+      <section>
+        <div class="sec-head"><h2>The numbers</h2></div>
+        <div class="kpis" id="kpis"></div>
+      </section>
+
+      <!-- every festival day -->
+      <section>
+        <div class="sec-head"><h2>Every festival day</h2></div>
+        <p class="sec-note">Each square is one day, coloured by what it did. Thursday is a later bolt-on; Monday is teardown (faded — never counted in the headline numbers). Toggle Thursday above to fold it in.</p>
+        <div class="card">
+          <figure id="typeGrid"></figure>
+          <div class="legend" id="typeLegend"></div>
+        </div>
+      </section>
+
+      <!-- rank -->
+      <section>
+        <div class="sec-head"><h2>Where it ranks in the summer</h2></div>
+        <div class="card">
+          <figure id="rankStrip"></figure>
+          <p class="sec-note" id="rankNote" style="margin-top:12px;margin-bottom:0"></p>
+        </div>
+      </section>
+
+      <!-- rain + cloud/sun -->
+      <section>
+        <div class="grid-2">
+          <div class="card"><h3>Rain over the weekend</h3><p class="cap">Total across the counted days, by year.</p><figure id="rainBars"></figure></div>
+          <div class="card"><h3>Cloud vs sun</h3><p class="cap">Grey bars: average cloud cover (%). Amber line: solar energy banked (MJ/m²/day).</p><figure id="cloudSolar"></figure></div>
+        </div>
+      </section>
+
+      <!-- records -->
+      <section>
+        <div class="sec-head"><h2>Record book</h2></div>
+        <div class="records four" id="records"></div>
+      </section>
+
+      <!-- day of festival + pack-up -->
+      <section>
+        <div class="grid-2">
+          <div class="card"><h3>Which day cops it worst</h3><p class="cap">Mean rain per day of the festival.</p><div id="dowGrid" class="mini"></div><p class="sec-note" id="dowNote" style="margin:12px 0 0"></p></div>
+          <div class="card"><h3>The pack-up desk</h3><p class="cap">Monday only — the walk of shame to the car.</p><div id="packup"></div></div>
+        </div>
+      </section>
+
+      <!-- taxonomy + trends -->
+      <section>
+        <div class="grid-2">
+          <div class="card"><h3>What kind of days</h3><p class="cap">Counted festival days by type. * one genuine Taps Aff is the running joke.</p><div class="taxo" id="taxo"></div></div>
+          <div class="card"><h3>Getting better or worse?</h3><p class="cap">Avg high (top) and weekend rain (bottom), by year.</p><figure id="trendTemp"></figure><figure id="trendRain"></figure><p class="sec-note" id="trendNote" style="margin:10px 0 0"></p></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap cols">
+      <div>
+        <b>Method.</b> Daily weather from <a href="https://open-meteo.com/en/docs/historical-weather-api" rel="noopener">Open-Meteo</a> — ERA5 reanalysis for 2009–2025, forecast model for the in-progress 2026 edition (<span class="pill prov">provisional*</span>). Figures are the nearest reanalysis grid cell (~25 km, coastal): regional, not a gauge in the field. Sunshine-hours are omitted because ERA5 over-counts them badly; cloud cover and solar energy are shown instead.
+      </div>
+      <div>
+        <b>Days.</b> The festival is Friday–Sunday. Thursday is a bolt-on (off by default). Monday is teardown and never enters the headline metrics — it only appears at the pack-up desk. No festival in 2020–2021 (COVID).
+      </div>
+      <div>
+        <b>Dates &amp; types.</b> Edition dates cross-checked and weekday-validated. Weather-type cutoffs (Taps Aff ≥22°C, Biblical ≥25 mm, Baltic ≤12.5°C, etc.) are blunt instruments for a laugh, not the Met Office. Built for the folk who keep going back anyway.
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

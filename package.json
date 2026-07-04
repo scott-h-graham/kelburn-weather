@@ -1,0 +1,10 @@
+{
+  "name": "kelburn-weather",
+  "version": "1.0.0",
+  "description": "How grim, exactly? Twenty-odd years of Kelburn Garden Party weather.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build-data": "node scripts/build-data.mjs"
+  }
+}

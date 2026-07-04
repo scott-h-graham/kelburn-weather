@@ -1,0 +1,30 @@
+{
+  "_note": "Authoritative Kelburn Garden Party date table. Dates weekday-validated. Core festival = Fri-Sun; Thursday = later bolt-on ticket (role 'thursday'); Monday = teardown/spin-off (role 'monday', excluded from main metrics). Roles are assigned by weekday at build time.",
+  "location": {
+    "name": "Kelburn Castle, Fairlie, near Largs, Ayrshire",
+    "lat": 55.756,
+    "lon": -4.861
+  },
+  "editions": [
+    { "year": 2009, "start": "2009-06-19", "end": "2009-06-21", "pattern": "Fri-Sun", "confidence": "medium", "sources": ["efestivals (inaugural, 19-21 Jun 2009)", "official site: established 2009"] },
+    { "year": 2010, "start": "2010-07-03", "end": "2010-07-04", "pattern": "Sat-Sun", "confidence": "high", "sources": ["The List (3 & 4 July 2010)"] },
+    { "year": 2011, "start": "2011-07-02", "end": "2011-07-03", "pattern": "Sat-Sun", "confidence": "medium", "sources": ["Scottish Fiction preview (this weekend, 2-3 Jul 2011)"] },
+    { "year": 2012, "start": "2012-06-30", "end": "2012-07-01", "pattern": "Sat-Sun", "confidence": "medium-high", "sources": ["The List / isthismusic (Sat 30 Jun - Sun 1 Jul)", "rocksalt review 4 Jul 2012"] },
+    { "year": 2013, "start": "2013-07-06", "end": "2013-07-07", "pattern": "Sat-Sun", "confidence": "high", "sources": ["The Skinny (6-7 Jul 2013)"] },
+    { "year": 2014, "start": "2014-07-04", "end": "2014-07-06", "pattern": "Fri-Sun", "confidence": "high", "sources": ["listings (Fri 4 - Sun 6 Jul, first 3-day)"] },
+    { "year": 2015, "start": "2015-07-03", "end": "2015-07-05", "pattern": "Fri-Sun", "confidence": "high", "sources": ["Mumble Festivals; listings (3-5 Jul)"] },
+    { "year": 2016, "start": "2016-07-01", "end": "2016-07-04", "pattern": "Fri-Mon", "confidence": "high", "sources": ["efestivals (Fri 1 - Mon 4 Jul)"] },
+    { "year": 2017, "start": "2017-06-30", "end": "2017-07-03", "pattern": "Fri-Mon", "confidence": "high", "sources": ["efestivals / The Skinny (Fri 30 Jun - Mon 3 Jul)"] },
+    { "year": 2018, "start": "2018-06-29", "end": "2018-07-02", "pattern": "Fri-Mon", "confidence": "high", "sources": ["efestivals (Fri 29 Jun - Mon 2 Jul)"] },
+    { "year": 2019, "start": "2019-07-05", "end": "2019-07-08", "pattern": "Fri-Mon", "confidence": "high", "sources": ["efestivals / RA (10th anniversary, 5-8 Jul)"] },
+    { "year": 2022, "start": "2022-07-01", "end": "2022-07-04", "pattern": "Fri-Mon", "confidence": "high", "sources": ["The Skinny; official FB event (1-4 Jul, return after COVID)"] },
+    { "year": 2023, "start": "2023-06-30", "end": "2023-07-03", "pattern": "Fri-Mon", "confidence": "high", "sources": ["Resident Advisor (Fri 30 Jun - Mon 3 Jul 2023)"] },
+    { "year": 2024, "start": "2024-07-04", "end": "2024-07-08", "pattern": "Thu-Mon", "confidence": "high", "sources": ["JamBase; RA (Thu 4 - Mon 8 Jul)"] },
+    { "year": 2025, "start": "2025-07-03", "end": "2025-07-07", "pattern": "Thu-Mon", "confidence": "high", "sources": ["JamBase; official (Thu 3 - Mon 7 Jul)"] },
+    { "year": 2026, "start": "2026-07-02", "end": "2026-07-06", "pattern": "Thu-Mon", "confidence": "high", "provisional": true, "sources": ["official FB; UKFestivalGuides (Thu 2 - Mon 6 Jul)"] }
+  ],
+  "cancelled": [
+    { "year": 2020, "reason": "COVID-19 (postponed)" },
+    { "year": 2021, "reason": "COVID-19 (postponed again)" }
+  ]
+}
