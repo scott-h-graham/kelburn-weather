@@ -1,8 +1,8 @@
 // main.js — loads the data, builds the controls, and re-renders on every filter change.
-import { KELBURN } from './data.js'
-import { compute } from './metrics.js'
-import * as C from './charts.js'
-import { ordinal, degC, niceDate, typeVar, TYPE_ORDER, TYPE_CODE, TYPE_META, WEEKDAY_FULL } from './format.js'
+import { KELBURN } from './data.js?v=1.1.0'
+import { compute } from './metrics.js?v=1.1.0'
+import * as C from './charts.js?v=1.1.0'
+import { ordinal, degC, niceDate, typeVar, TYPE_ORDER, TYPE_CODE, TYPE_META, WEEKDAY_FULL } from './format.js?v=1.1.0'
 
 const $ = (id) => document.getElementById(id)
 const el = (tag, attrs = {}, html) => { const n = document.createElement(tag); Object.assign(n, attrs); if (html != null) n.innerHTML = html; return n }

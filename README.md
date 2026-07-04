@@ -41,6 +41,10 @@ node scripts/smoke.mjs  # sanity-check the render path
 
 Re-run after the 2026 edition finishes to swap its provisional forecast figures for the final reanalysis.
 
+## Changing the code
+
+After editing any CSS/JS, bump `version` in `package.json` and run `node scripts/stamp.mjs`. That stamps `?v=<version>` onto the asset URLs and module imports so returning visitors get the new files instead of a stale browser cache.
+
 ## Caveats
 
 The figures are the nearest ERA5 grid cell (~25 km, coastal) — regional, not a gauge in the field. Sunshine-hours are omitted because ERA5 over-counts them; cloud cover and solar energy are shown instead. Weather-type cut-offs (Taps Aff ≥22°C, Biblical ≥25 mm, Baltic ≤12.5°C, …) are blunt instruments for a laugh, not the Met Office.

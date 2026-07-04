@@ -3,7 +3,7 @@
 // Colours come from CSS custom properties, so the charts follow the theme for free.
 // Tooltip text lives in data-tip (plain text, newline-separated); main.js wires the hover.
 
-import { typeVar, TYPE_CODE, niceDate, degC } from './format.js'
+import { typeVar, TYPE_CODE, niceDate, degC } from './format.js?v=1.1.0'
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 const rainRamp = (mm) => `var(--rain-${mm >= 25 ? 4 : mm >= 12 ? 3 : mm >= 5 ? 2 : mm >= 1 ? 1 : 0})`
