@@ -83,6 +83,16 @@
         <div class="records four" id="records"></div>
       </section>
 
+      <!-- night -->
+      <section>
+        <div class="sec-head"><h2>After dark</h2></div>
+        <p class="sec-note">Overnight lows only — the campers' problem, kept out of the headline numbers on purpose.</p>
+        <div class="grid-2">
+          <div class="card"><h3>In the tent</h3><div id="nightTiles" class="mini"></div><p class="sec-note" id="nightNote" style="margin:12px 0 0"></p></div>
+          <div class="card"><h3>How cold it got, by year</h3><p class="cap">Coldest overnight low each year. Dashed line = the average.</p><figure id="nightChart"></figure></div>
+        </div>
+      </section>
+
       <!-- day of festival + pack-up -->
       <section>
         <div class="grid-2">
@@ -107,7 +117,7 @@
         <b>Method.</b> Daily weather from <a href="https://open-meteo.com/en/docs/historical-weather-api" rel="noopener">Open-Meteo</a> — ERA5 reanalysis for 2009–2025, forecast model for the in-progress 2026 edition (<span class="pill prov">provisional*</span>). Figures are the nearest reanalysis grid cell (~25 km, coastal): regional, not a gauge in the field. Sunshine-hours are omitted because ERA5 over-counts them badly; cloud cover and solar energy are shown instead.
       </div>
       <div>
-        <b>Days.</b> The festival is Friday–Sunday. Thursday is a bolt-on (off by default). Monday is teardown and never enters the headline metrics — it only appears at the pack-up desk. No festival in 2020–2021 (COVID).
+        <b>Days.</b> The festival is Friday–Sunday. Thursday is a bolt-on (off by default). Monday is teardown and never enters the headline metrics — it only appears at the pack-up desk. Overnight lows are the same: their own "after dark" section, never folded into the headline numbers. No festival in 2020–2021 (COVID).
       </div>
       <div>
         <b>Dates &amp; types.</b> Edition dates cross-checked and weekday-validated. Weather-type cutoffs (Taps Aff ≥22°C, Biblical ≥25 mm, Baltic ≤12.5°C, etc.) are blunt instruments for a laugh, not the Met Office. Built for the folk who keep going back anyway.

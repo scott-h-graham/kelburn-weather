@@ -11,7 +11,7 @@ const css = read('assets/css/styles.css')
 // concatenate modules in dependency order, stripping module syntax so they share one scope
 let main = read('assets/js/main.js').replace(
   "import * as C from './charts.js'",
-  'const C = { typeGrid, rainBars, rankStrip, cloudSolar, trendLine }'
+  'const C = { typeGrid, rainBars, rankStrip, cloudSolar, trendLine, nightLows }'
 )
 const modules = [read('assets/js/data.js'), read('assets/js/format.js'), read('assets/js/metrics.js'), read('assets/js/charts.js'), main]
 const bundle = modules.join('\n\n')

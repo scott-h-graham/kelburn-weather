@@ -73,6 +73,7 @@ function render() {
   $('rainBars').innerHTML = C.rainBars(r.stats)
   $('cloudSolar').innerHTML = C.cloudSolar(r.stats)
   renderRecords(r)
+  renderNight(r)
   renderDayOfFest(r)
   renderPackup(r)
   renderTaxonomy(r)
@@ -137,11 +138,24 @@ function renderRecords(r) {
     s.wettestDay && recCard('Wettest single day', `${s.wettestDay.rain.toFixed(1)} mm`, niceDate(s.wettestDay.date)),
     s.windiestDay && recCard('Windiest (gust)', `${Math.round(s.windiestDay.gust)} km/h`, niceDate(s.windiestDay.date)),
     s.coldestDay && recCard('Coldest day', degC(s.coldestDay.tmax), niceDate(s.coldestDay.date)),
-    s.coldestNight && recCard('Coldest night', degC(s.coldestNight.tmin), niceDate(s.coldestNight.date)),
     greyest && recCard('Greyest year', `${Math.round(greyest.cloudAvg)}% cloud`, `${greyest.year}`),
     clearest && recCard('Clearest year', `${Math.round(clearest.cloudAvg)}% cloud`, `${clearest.year}`),
   ].filter(Boolean)
   $('records').innerHTML = cards.join('')
+}
+
+function renderNight(r) {
+  const n = r.night
+  if (!n || !n.nights) { $('nightTiles').innerHTML = ''; $('nightChart').innerHTML = ''; $('nightNote').textContent = ''; return }
+  $('nightTiles').innerHTML = [
+    `<div class="dow"><b>Coldest night</b><div class="n tnum">${degC(n.coldest.tmin)}</div><div class="u">${niceDate(n.coldest.date)}</div></div>`,
+    `<div class="dow"><b>Avg overnight low</b><div class="n tnum">${degC(n.avgLow)}</div><div class="u">across ${n.nights} nights</div></div>`,
+    `<div class="dow"><b>Mildest night</b><div class="n tnum">${degC(n.warmest.tmin)}</div><div class="u">${niceDate(n.warmest.date)}</div></div>`,
+  ].join('')
+  $('nightChart').innerHTML = C.nightLows(n.perEdition, n.avgLow)
+  const f = n.coldestFeels
+  $('nightNote').innerHTML = `<b>${n.shiverNights}</b> of ${n.nights} nights got down to ${n.shiverThreshold}°C or colder.` +
+    (f && f.appMin != null ? ` Worst wind-chill felt like <b>${degC(f.appMin)}</b>, ${niceDate(f.date)}.` : '')
 }
 
 function renderDayOfFest(r) {

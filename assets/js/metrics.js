@@ -175,7 +175,6 @@ export function compute(KELBURN, selection) {
   const hottestDay = maxBy(allDays, (d) => d.tmax ?? -99)
   const coldestDay = minBy(allDays, (d) => d.tmax ?? 99)
   const windiestDay = maxBy(allDays, (d) => d.gust || 0)
-  const coldestNight = minBy(allDays, (d) => d.tmin ?? 99)
   const bestDay = minBy(allDays, misery)
   const grimmestDay = maxBy(allDays, misery)
 
@@ -212,6 +211,20 @@ export function compute(KELBURN, selection) {
   const tempTrend = slope(nonProv.map((s) => [s.year, s.tmaxAvg]).filter((p) => defined(p[1])))
   const rainTrend = slope(nonProv.map((s) => [s.year, s.rainTotal]))
 
+  // night — overnight lows, deliberately kept OUT of the headline metrics (own section)
+  const SHIVER = 9
+  const night = {
+    nights: allDays.length,
+    avgLow: mean(allDays.map((d) => d.tmin).filter(defined)),
+    avgFeels: mean(allDays.map((d) => d.appMin).filter(defined)),
+    coldest: minBy(allDays, (d) => d.tmin ?? 99),
+    warmest: maxBy(allDays, (d) => d.tmin ?? -99),
+    coldestFeels: minBy(allDays, (d) => d.appMin ?? 99),
+    shiverThreshold: SHIVER,
+    shiverNights: allDays.filter((d) => d.tmin != null && d.tmin <= SHIVER).length,
+    perEdition: stats.map((s) => ({ year: s.year, provisional: s.provisional, avgLow: mean(s.days.map((d) => d.tmin).filter(defined)), coldest: s.tminMin })),
+  }
+
   return {
     selection: { years: [...years].sort(), includeThursday },
     editionCount: stats.length,
@@ -235,7 +248,7 @@ export function compute(KELBURN, selection) {
       tempVsTypical: rankings.length ? mean(rankings.map((r) => r.tempVsTypical)) : null,
     },
     superlatives: {
-      wettestDay, hottestDay, coldestDay, windiestDay, coldestNight, bestDay, grimmestDay,
+      wettestDay, hottestDay, coldestDay, windiestDay, bestDay, grimmestDay,
       wettestEd, driestEd, sunniestEd, greyestEd,
     },
     typeCounts,
@@ -243,6 +256,7 @@ export function compute(KELBURN, selection) {
     perEditionRanks: rankings,
     byWeekday,
     packup,
+    night,
     trends: { tempPerDecade: tempTrend * 10, rainPerDecade: rainTrend * 10, points: nonProv.map((s) => ({ year: s.year, tmaxAvg: s.tmaxAvg, rainTotal: s.rainTotal })) },
   }
 }

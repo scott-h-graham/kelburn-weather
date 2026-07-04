@@ -111,6 +111,29 @@ export function cloudSolar(stats) {
   return s + '</svg>'
 }
 
+// ---------- coldest overnight low, by edition (lollipop) ----------
+export function nightLows(perEdition, avgLow) {
+  const items = perEdition.filter((p) => p.coldest != null && isFinite(p.coldest))
+  if (!items.length) return `<svg class="chart" viewBox="0 0 720 200"></svg>`
+  const W = 720, H = 210, padL = 28, padR = 12, padT = 16, padB = 30
+  const temps = items.map((p) => p.coldest)
+  const lo = Math.floor(Math.min(...temps, avgLow ?? Infinity)) - 1
+  const hi = Math.ceil(Math.max(...temps, avgLow ?? -Infinity)) + 1
+  const bw = (W - padL - padR) / items.length
+  const y = (v) => padT + (1 - (v - lo) / (hi - lo || 1)) * (H - padT - padB)
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Coldest overnight low by year">`
+  for (let g = lo + 1; g < hi; g += 2) s += `<line x1="${padL}" x2="${W - padR}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line-2)"/><text x="${padL - 4}" y="${y(g) + 3}" text-anchor="end" font-size="9" font-family="var(--mono)" fill="var(--ink-3)">${g}</text>`
+  if (avgLow != null) s += `<line x1="${padL}" x2="${W - padR}" y1="${y(avgLow)}" y2="${y(avgLow)}" stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="${W - padR}" y="${y(avgLow) - 4}" text-anchor="end" font-size="9.5" font-family="var(--mono)" fill="var(--accent)">avg ${avgLow.toFixed(1)}°</text>`
+  items.forEach((p, i) => {
+    const cx = padL + i * bw + bw / 2, cy = y(p.coldest)
+    const tip = `${p.year}${p.provisional ? ' (provisional)' : ''}\ncoldest night ${p.coldest.toFixed(1)}°${p.avgLow != null ? ` · avg low ${p.avgLow.toFixed(1)}°` : ''}`
+    s += `<line x1="${cx}" x2="${cx}" y1="${H - padB}" y2="${cy}" stroke="var(--wt-cold)" stroke-width="1.5" opacity="0.45"/>`
+    s += `<circle class="cell" data-tip="${esc(tip)}" cx="${cx}" cy="${cy}" r="4.5" fill="var(--wt-cold)" stroke="var(--surface)" stroke-width="1.3"/>`
+    if (items.length <= 12 || i % 2 === 0) s += `<text x="${cx}" y="${H - padB + 13}" text-anchor="middle" font-size="9.5" font-family="var(--mono)" fill="var(--ink-3)">${String(p.year).slice(2)}</text>`
+  })
+  return s + '</svg>'
+}
+
 // ---------- small trend line ----------
 export function trendLine(points, key, unit) {
   const pts = points.filter((p) => p[key] != null)
