@@ -3,18 +3,20 @@
 // Colours come from CSS custom properties, so the charts follow the theme for free.
 // Tooltip text lives in data-tip (plain text, newline-separated); main.js wires the hover.
 
-import { typeVar, TYPE_CODE, niceDate, degC } from './format.js?v=1.1.0'
+import { typeVar, TYPE_CODE, niceDate, degC } from './format.js?v=1.2.0'
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 const rainRamp = (mm) => `var(--rain-${mm >= 25 ? 4 : mm >= 12 ? 3 : mm >= 5 ? 2 : mm >= 1 ? 1 : 0})`
+const nightRamp = (t) => (t == null ? 'var(--line-2)' : `var(--night-${t <= 7 ? 0 : t <= 9 ? 1 : t <= 11 ? 2 : t <= 13 ? 3 : 4})`)
 
-// ---------- weather-type grid: rows = editions, cols = Thu..Mon ----------
-export function typeGrid(editions, includeThursday) {
+// ---------- day/night grid: rows = editions, cols = Thu..Mon ----------
+// mode 'day' colours by weather type; mode 'night' colours by overnight low.
+export function typeGrid(editions, includeThursday, mode = 'day') {
   const cols = ['Thu', 'Fri', 'Sat', 'Sun', 'Mon']
   const rowH = 26, colW = 62, padL = 52, padT = 26, padR = 8, padB = 6
   const W = padL + cols.length * colW + padR
   const H = padT + editions.length * rowH + padB
-  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Weather type for every festival day by year">`
+  let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${mode === 'night' ? 'Overnight low for every festival night by year' : 'Weather type for every festival day by year'}">`
   cols.forEach((c, i) => {
     s += `<text x="${padL + i * colW + colW / 2}" y="16" text-anchor="middle" font-size="11" font-family="var(--mono)" fill="var(--ink-3)">${c}</text>`
   })
@@ -28,11 +30,17 @@ export function typeGrid(editions, includeThursday) {
       if (!d) { s += `<rect x="${x + 2}" y="${y + 2}" width="${colW - 4}" height="${rowH - 4}" rx="4" fill="none" stroke="var(--line-2)" stroke-dasharray="2 3"/>`; return }
       const counted = d.role === 'core' || (d.role === 'thursday' && includeThursday)
       const muted = d.role === 'monday' || (d.role === 'thursday' && !includeThursday)
-      const tip = `${niceDate(d.date)} · ${d.type}\nrain ${d.rain} mm · ${degC(d.tmax)} · cloud ${d.cloud}%${d.role !== 'core' ? '\n(' + (d.role === 'monday' ? 'teardown, not counted' : includeThursday ? 'bolt-on, counted' : 'bolt-on, not counted') + ')' : ''}`
+      const roleNote = d.role !== 'core' ? '\n(' + (d.role === 'monday' ? 'teardown, not counted' : includeThursday ? 'bolt-on, counted' : 'bolt-on, not counted') + ')' : ''
+      const isNight = mode === 'night'
+      const fill = isNight ? nightRamp(d.tmin) : typeVar(d.type)
+      const label = isNight ? (d.tmin != null ? Math.round(d.tmin) + '°' : '') : (TYPE_CODE[d.type] || '')
+      const tip = isNight
+        ? `${niceDate(d.date)} · night\nlow ${degC(d.tmin)} · feels ${degC(d.appMin)}${roleNote}`
+        : `${niceDate(d.date)} · ${d.type}\nrain ${d.rain} mm · ${degC(d.tmax)} · cloud ${d.cloud}%${roleNote}`
       const cx = x + colW / 2, cy = y + rowH / 2
       s += `<g><title>${esc(tip)}</title>`
-        + `<rect class="cell" data-tip="${esc(tip)}" x="${x + 2}" y="${y + 2}" width="${colW - 4}" height="${rowH - 4}" rx="4" fill="${typeVar(d.type)}" opacity="${muted ? 0.34 : 1}"${counted ? '' : ' stroke="var(--line)"'}/>`
-        + `<text x="${cx}" y="${cy + 3.5}" text-anchor="middle" font-size="10" font-family="var(--mono)" fill="#fff" stroke="rgba(0,0,0,.4)" stroke-width="0.6" paint-order="stroke" opacity="${muted ? 0.5 : 0.95}" pointer-events="none">${TYPE_CODE[d.type] || ''}</text>`
+        + `<rect class="cell" data-tip="${esc(tip)}" x="${x + 2}" y="${y + 2}" width="${colW - 4}" height="${rowH - 4}" rx="4" fill="${fill}" opacity="${muted ? 0.34 : 1}"${counted ? '' : ' stroke="var(--line)"'}/>`
+        + `<text x="${cx}" y="${cy + 3.5}" text-anchor="middle" font-size="10" font-family="var(--mono)" fill="#fff" stroke="rgba(0,0,0,.4)" stroke-width="0.6" paint-order="stroke" opacity="${muted ? 0.5 : 0.95}" pointer-events="none">${label}</text>`
         + `</g>`
     })
   })

@@ -1,8 +1,8 @@
 // main.js — loads the data, builds the controls, and re-renders on every filter change.
-import { KELBURN } from './data.js?v=1.1.0'
-import { compute } from './metrics.js?v=1.1.0'
-import * as C from './charts.js?v=1.1.0'
-import { ordinal, degC, niceDate, typeVar, TYPE_ORDER, TYPE_CODE, TYPE_META, WEEKDAY_FULL } from './format.js?v=1.1.0'
+import { KELBURN } from './data.js?v=1.2.0'
+import { compute } from './metrics.js?v=1.2.0'
+import * as C from './charts.js?v=1.2.0'
+import { ordinal, degC, niceDate, typeVar, TYPE_ORDER, TYPE_CODE, TYPE_META, WEEKDAY_FULL } from './format.js?v=1.2.0'
 
 const $ = (id) => document.getElementById(id)
 const el = (tag, attrs = {}, html) => { const n = document.createElement(tag); Object.assign(n, attrs); if (html != null) n.innerHTML = html; return n }
@@ -10,7 +10,7 @@ const median = (xs) => { const a = [...xs].sort((p, q) => p - q); return a.lengt
 const CANCELLED = new Set((KELBURN.meta.cancelled || []).map((c) => c.year))
 const ALL_YEARS = KELBURN.editions.map((e) => e.year)
 
-const state = { years: new Set(ALL_YEARS), thu: false }
+const state = { years: new Set(ALL_YEARS), thu: false, gridMode: 'day' }
 
 /* ---------------- theme ---------------- */
 function initTheme() {
@@ -48,6 +48,11 @@ function buildFilters() {
   const thu = $('thuToggle')
   thu.addEventListener('change', () => { state.thu = thu.checked; render() })
   $('themeBtn').addEventListener('click', cycleTheme)
+  document.querySelectorAll('#gridToggle .seg-btn').forEach((b) => b.addEventListener('click', () => {
+    state.gridMode = b.dataset.mode
+    document.querySelectorAll('#gridToggle .seg-btn').forEach((x) => x.setAttribute('aria-pressed', x.dataset.mode === state.gridMode))
+    renderGrid()
+  }))
 }
 function setYears(list) {
   state.years = new Set(list)
@@ -68,7 +73,7 @@ function render() {
 
   renderHeadline(r)
   renderKPIs(r)
-  $('typeGrid').innerHTML = C.typeGrid(editions, state.thu)
+  renderGrid(editions)
   renderRank(r)
   $('rainBars').innerHTML = C.rainBars(r.stats)
   $('cloudSolar').innerHTML = C.cloudSolar(r.stats)
@@ -86,6 +91,18 @@ function showEmpty() {
   $('empty').style.display = ''
   $('hVerdict').textContent = '–'
   $('hSub').innerHTML = 'Nothing selected — pick a year or two.'
+}
+
+function renderGrid(editions) {
+  editions = editions || KELBURN.editions.filter((e) => state.years.has(e.year)).sort((a, b) => a.year - b.year)
+  const night = state.gridMode === 'night'
+  $('gridTitle').textContent = night ? 'Every festival night' : 'Every festival day'
+  $('gridNote').textContent = night
+    ? 'Each square is one night, coloured by the overnight low — colder on the left of the legend, milder on the right. Thursday is a bolt-on; Monday is teardown (faded).'
+    : 'Each square is one day, coloured by what it did. Thursday is a later bolt-on; Monday is teardown (faded — never counted). Toggle Thursday above to fold it in.'
+  $('typeGrid').innerHTML = C.typeGrid(editions, state.thu, state.gridMode)
+  buildLegend(state.gridMode)
+  wireTips()
 }
 
 function renderHeadline(r) {
@@ -212,15 +229,19 @@ function move(e) {
   tip.style.left = Math.max(6, x) + 'px'; tip.style.top = Math.max(6, y) + 'px'
 }
 
-function buildLegend() {
+function buildLegend(mode = 'day') {
   const l = $('typeLegend')
   if (!l) return
-  l.innerHTML = TYPE_ORDER.map((t) => `<span><i class="swatch" style="background:${typeVar(t)}"></i><b class="mono">${TYPE_CODE[t]}</b> ${t}</span>`).join('') +
-    `<span><i class="swatch" style="background:var(--ink-3);opacity:.34"></i>faded = not counted</span>`
+  const notCounted = `<span><i class="swatch" style="background:var(--ink-3);opacity:.34"></i>faded = not counted</span>`
+  if (mode === 'night') {
+    const steps = [['0', '≤7°'], ['1', '8–9°'], ['2', '10–11°'], ['3', '12–13°'], ['4', '14°+']]
+    l.innerHTML = steps.map(([n, lab]) => `<span><i class="swatch" style="background:var(--night-${n})"></i>${lab}</span>`).join('') + notCounted
+    return
+  }
+  l.innerHTML = TYPE_ORDER.map((t) => `<span><i class="swatch" style="background:${typeVar(t)}"></i><b class="mono">${TYPE_CODE[t]}</b> ${t}</span>`).join('') + notCounted
 }
 
 /* ---------------- go ---------------- */
 initTheme()
 buildFilters()
-buildLegend()
 render()

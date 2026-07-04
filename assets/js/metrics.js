@@ -1,7 +1,7 @@
 // metrics.js — pure, DOM-free analysis of the Kelburn dataset.
 // Everything recomputes from the current selection (which years, and whether Thursday counts),
 // so the whole page reacts to the filters. Monday (teardown) is NEVER part of the main metrics;
-// it only feeds the pack-up desk.
+// it only feeds the packing-up section.
 
 // ---- small date helpers (UTC, no timezone surprises) ----
 const DAY_MS = 86400000
@@ -200,7 +200,7 @@ export function compute(KELBURN, selection) {
     if (ds.length) byWeekday[wd] = { n: ds.length, rain: mean(ds.map((d) => d.rain)), tmax: mean(ds.map((d) => d.tmax).filter(defined)), cloud: mean(ds.map((d) => d.cloud).filter(defined)) }
   }
 
-  // pack-up desk (Monday only, independent of Thursday toggle)
+  // packing up (Monday only, independent of Thursday toggle)
   const mondays = editions.flatMap((e) => mondayDays(e).map((d) => ({ ...d, year: e.year })))
   const worstMonday = maxBy(mondays, (d) => d.rain || 0)
   const packup = mondays.length

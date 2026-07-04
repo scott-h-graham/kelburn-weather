@@ -33,6 +33,9 @@
   --wt-dreich: #566269;   /* dreich */
   --wt-biblical: #2b3a52; /* biblical */
 
+  /* night overnight-low ramp: cold -> mild */
+  --night-0: #2c5985; --night-1: #6d97b5; --night-2: #b7bdb8; --night-3: #d8a878; --night-4: #c47a3d;
+
   --good: #4b8a52;
   --warn: #946010;
   --bad: #b2482f;
@@ -78,6 +81,7 @@
     --wt-cold: #7397c4;
     --wt-dreich: #7c8a92;
     --wt-biblical: #6d84a8;
+    --night-0: #3f79b0; --night-1: #6fa0c4; --night-2: #9aa7a2; --night-3: #d3a271; --night-4: #e0894a;
 
     --good: #6fb573;
     --warn: #d99a3f;
@@ -94,6 +98,7 @@
   --rain-0: #cfe0e3; --rain-1: #93bcc4; --rain-2: #57929e; --rain-3: #2f6f7c; --rain-4: #1a4b56;
   --wt-good: #6f9a6a; --wt-heat: #bf5a1e; --wt-grey: #9aa3a0; --wt-drizzle: #6f97a8;
   --wt-wind: #4a7d86; --wt-cold: #5f7fa8; --wt-dreich: #566269; --wt-biblical: #2b3a52;
+  --night-0: #2c5985; --night-1: #6d97b5; --night-2: #b7bdb8; --night-3: #d8a878; --night-4: #c47a3d;
   --good: #4b8a52; --warn: #946010; --bad: #b2482f;
   --shadow: 0 1px 2px rgba(20, 30, 28, .06), 0 6px 20px rgba(20, 30, 28, .05);
 }
@@ -104,6 +109,7 @@
   --rain-0: #29373c; --rain-1: #37616b; --rain-2: #4a8a97; --rain-3: #63aebc; --rain-4: #8fd0db;
   --wt-good: #77a86f; --wt-heat: #e08a44; --wt-grey: #8a938f; --wt-drizzle: #6fa3b6;
   --wt-wind: #5b98a3; --wt-cold: #7397c4; --wt-dreich: #7c8a92; --wt-biblical: #6d84a8;
+  --night-0: #3f79b0; --night-1: #6fa0c4; --night-2: #9aa7a2; --night-3: #d3a271; --night-4: #e0894a;
   --good: #6fb573; --warn: #d99a3f; --bad: #d97a5f;
   --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
 }
@@ -143,6 +149,10 @@ h1, h2, h3 { margin: 0; font-weight: 650; line-height: 1.1; text-wrap: balance; 
   font-family: var(--mono); font-size: 12px; display: inline-flex; align-items: center; gap: 6px;
 }
 .iconbtn:hover { border-color: var(--accent); }
+.seg { display: inline-flex; align-self: center; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg-btn { font-family: var(--mono); font-size: 12px; padding: 0 13px; min-height: 40px; background: var(--surface-2); color: var(--ink-2); border: 0; cursor: pointer; }
+.seg-btn + .seg-btn { border-left: 1px solid var(--line); }
+.seg-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
 /* ---- hero ---- */
 .hero { padding: clamp(22px, 5vw, 44px) 0 8px; }

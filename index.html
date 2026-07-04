@@ -8,7 +8,7 @@
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#1c6d78">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3C10 12 7 16 7 20a9 9 0 0 0 18 0c0-4-3-8-9-17z' fill='%231c6d78'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="assets/css/styles.css?v=1.1.0">
+  <link rel="stylesheet" href="assets/css/styles.css?v=1.2.0">
 </head>
 <body>
   <div class="topbar">
@@ -50,10 +50,16 @@
         <div class="kpis" id="kpis"></div>
       </section>
 
-      <!-- every festival day -->
+      <!-- every festival day / night -->
       <section>
-        <div class="sec-head"><h2>Every festival day</h2></div>
-        <p class="sec-note">Each square is one day, coloured by what it did. Thursday is a later bolt-on; Monday is teardown (faded — never counted in the headline numbers). Toggle Thursday above to fold it in.</p>
+        <div class="sec-head">
+          <h2 id="gridTitle">Every festival day</h2>
+          <div class="seg" id="gridToggle" role="group" aria-label="Show days or nights">
+            <button class="seg-btn" type="button" data-mode="day" aria-pressed="true">Days</button>
+            <button class="seg-btn" type="button" data-mode="night" aria-pressed="false">Nights</button>
+          </div>
+        </div>
+        <p class="sec-note" id="gridNote"></p>
         <div class="card">
           <figure id="typeGrid"></figure>
           <div class="legend" id="typeLegend"></div>
@@ -97,7 +103,7 @@
       <section>
         <div class="grid-2">
           <div class="card"><h3>Which day cops it worst</h3><p class="cap">Mean rain per day of the festival.</p><div id="dowGrid" class="mini"></div><p class="sec-note" id="dowNote" style="margin:12px 0 0"></p></div>
-          <div class="card"><h3>The pack-up desk</h3><p class="cap">Monday only — the walk of shame to the car.</p><div id="packup"></div></div>
+          <div class="card"><h3>Packing up</h3><p class="cap">Monday only — the walk of shame to the car.</p><div id="packup"></div></div>
         </div>
       </section>
 
@@ -117,7 +123,7 @@
         <b>Method.</b> Daily weather from <a href="https://open-meteo.com/en/docs/historical-weather-api" rel="noopener">Open-Meteo</a> — ERA5 reanalysis for 2009–2025, forecast model for the in-progress 2026 edition (<span class="pill prov">provisional*</span>). Figures are the nearest reanalysis grid cell (~25 km, coastal): regional, not a gauge in the field. Sunshine-hours are omitted because ERA5 over-counts them badly; cloud cover and solar energy are shown instead.
       </div>
       <div>
-        <b>Days.</b> The festival is Friday–Sunday. Thursday is a bolt-on (off by default). Monday is teardown and never enters the headline metrics — it only appears at the pack-up desk. Overnight lows are the same: their own "after dark" section, never folded into the headline numbers. No festival in 2020–2021 (COVID).
+        <b>Days.</b> The festival is Friday–Sunday. Thursday is a bolt-on (off by default). Monday is teardown and never enters the headline metrics — it only appears under packing up. Overnight lows are the same: their own "after dark" section, never folded into the headline numbers. No festival in 2020–2021 (COVID).
       </div>
       <div>
         <b>Dates &amp; types.</b> Edition dates cross-checked and weekday-validated. Weather-type cutoffs (Taps Aff ≥22°C, Biblical ≥25 mm, Baltic ≤12.5°C, etc.) are blunt instruments for a laugh, not the Met Office. Built for the folk who keep going back anyway.
@@ -125,6 +131,6 @@
     </div>
   </footer>
 
-  <script type="module" src="assets/js/main.js?v=1.1.0"></script>
+  <script type="module" src="assets/js/main.js?v=1.2.0"></script>
 </body>
 </html>
